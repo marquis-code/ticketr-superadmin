@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen   flex flex-col">
     <!-- Header -->
-    <header class="glass-card border-b border-gray-200/80 px-6 py-4 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center space-x-6">
+    <header class="glass-card border-b border-gray-200/80 px-4 md:px-6 py-4 sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full md:w-auto">
           <NuxtLink to="/" class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-xl text-gray-900">
               👑
@@ -11,7 +11,7 @@
             <span class="font-bold text-lg text-gray-900">Ticketr Super Admin</span>
           </NuxtLink>
 
-          <nav class="hidden md:flex items-center space-x-4 text-xs font-semibold">
+          <nav class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide text-xs font-semibold">
             <NuxtLink to="/dashboard" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg">Overview</NuxtLink>
             <NuxtLink to="/dashboard/events" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg">Global Events</NuxtLink>
             <NuxtLink to="/dashboard/transactions" class="bg-primary text-white px-3 py-1.5 rounded-lg">Global Transactions</NuxtLink>
@@ -20,7 +20,7 @@
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full space-y-6">
+    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 flex-grow w-full space-y-6">
       <div>
         <h1 class="text-2xl font-extrabold text-gray-900">Global Revenue & Transaction Audit Log</h1>
         <p class="text-xs text-gray-600 mt-1">Monitor platform GMV across all tenants and Paystack transaction references.</p>
