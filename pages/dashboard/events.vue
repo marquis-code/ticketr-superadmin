@@ -1,26 +1,9 @@
 <template>
-  <div class="min-h-screen   flex flex-col">
+  <div>
     <!-- Top Header Navigation -->
-    <header class="glass-card border-b border-gray-200/80 px-4 md:px-6 py-4 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full md:w-auto">
-          <NuxtLink to="/" class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-xl text-gray-900">
-              👑
-            </div>
-            <span class="font-bold text-lg text-gray-900">Ticketr Super Admin</span>
-          </NuxtLink>
+    
 
-          <nav class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide text-xs font-semibold">
-            <NuxtLink to="/dashboard" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg">Overview</NuxtLink>
-            <NuxtLink to="/dashboard/events" class="bg-primary text-white px-3 py-1.5 rounded-lg">Global Events</NuxtLink>
-            <NuxtLink to="/dashboard/transactions" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg">Global Transactions</NuxtLink>
-          </nav>
-        </div>
-      </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 flex-grow w-full space-y-6">
+    <main class="w-full space-y-8">
       <div>
         <h1 class="text-2xl font-extrabold text-gray-900">Global Events Oversight</h1>
         <p class="text-xs text-gray-600 mt-1">Audit published events across all onboarded institutions and organizations.</p>
@@ -138,6 +121,8 @@
 </template>
 
 <script setup>
+definePageMeta({ layout: 'superadmin' });
+
 import { ref, onMounted } from 'vue';
 import { X, Loader2 } from 'lucide-vue-next';
 

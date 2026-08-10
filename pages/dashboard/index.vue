@@ -1,40 +1,10 @@
 <template>
-  <div class="min-h-screen   flex flex-col">
+  <div>
     <!-- Navbar -->
-    <header class="glass-card border-b border-gray-200/80 px-4 md:px-6 py-4 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 w-full md:w-auto">
-          <NuxtLink to="/dashboard" class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-xl text-gray-900">
-              👑
-            </div>
-            <div>
-              <span class="font-bold text-lg text-gray-900 block">Ticketr Super Admin</span>
-              <span class="text-xs text-emerald-400 font-medium">Global Platform Control</span>
-            </div>
-          </NuxtLink>
-
-          <!-- Nav Tabs -->
-          <nav class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide text-xs font-semibold">
-            <NuxtLink to="/dashboard" class="bg-primary text-white px-3 py-1.5 rounded-lg">Overview</NuxtLink>
-            <NuxtLink to="/dashboard/events" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg transition">Global Events</NuxtLink>
-            <NuxtLink to="/dashboard/transactions" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg transition">Global Transactions</NuxtLink>
-          </nav>
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <button @click="showAddModal = true" class="btn-primary text-xs !py-2 !px-3.5 flex items-center gap-1">
-            <span>+ Onboard Tenant</span>
-          </button>
-          <button @click="showLogoutModal = true" class="text-xs text-gray-600 hover:text-gray-900 px-3 py-2">
-            Logout
-          </button>
-        </div>
-      </div>
-    </header>
+    
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 md:px-6 py-8 flex-grow w-full space-y-8">
+    <main class="w-full space-y-8">
       <!-- Global KPIs -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="glass-card rounded-2xl p-6 border-emerald-500/20">
@@ -193,6 +163,8 @@
     </div>
 </template>
 <script setup>
+definePageMeta({ layout: 'superadmin' });
+
 import { toast } from 'vue-sonner';
 import { ref, onMounted } from 'vue';
 
