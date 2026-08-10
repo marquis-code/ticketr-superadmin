@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'CMultiTickets - Super Admin Command Center',
+      title: 'Ticketr - Super Admin Command Center',
       meta: [{ name: 'description', content: 'Super Admin control panel for tenant organization management.' }],
       link: [
         { rel: 'stylesheet', href: 'https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,700,900&display=swap' },

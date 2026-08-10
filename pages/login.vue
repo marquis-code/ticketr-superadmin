@@ -1,34 +1,34 @@
 <template>
-  <div class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
+  <div class="min-h-screen   flex items-center justify-center p-6">
     <div class="w-full max-w-md glass-card rounded-2xl p-8 border-emerald-500/30">
       <div class="text-center mb-8">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-2xl text-white shadow-lg shadow-emerald-500/20 mx-auto mb-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-2xl text-gray-900 mx-auto mb-3">
           👑
         </div>
-        <h1 class="text-2xl font-extrabold text-white">Super Admin Command Center</h1>
-        <p class="text-xs text-slate-400 mt-1">CMultiTickets Platform Control & Tenant Management</p>
+        <h1 class="text-2xl font-extrabold text-gray-900">Super Admin Command Center</h1>
+        <p class="text-xs text-gray-600 mt-1">Ticketr Platform Control & Tenant Management</p>
       </div>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Super Admin Email</label>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Super Admin Email</label>
           <input
             v-model="email"
             type="email"
-            placeholder="superadmin@cmultickets.com"
+            placeholder="superadmin@ticketr.org"
             required
-            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition"
+            class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Password</label>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Password</label>
           <input
             v-model="password"
             type="password"
             placeholder="••••••••"
             required
-            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition"
+            class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition"
           />
         </div>
 
@@ -72,8 +72,8 @@ async function handleLogin() {
         await registerSuperAdmin();
         return;
       }
-      localStorage.setItem('cmt_super_token', data.accessToken);
-      localStorage.setItem('cmt_super_user', JSON.stringify(data.user));
+      localStorage.setItem('ticketr_super_token', data.accessToken);
+      localStorage.setItem('ticketr_super_user', JSON.stringify(data.user));
       useRouter().push('/dashboard');
     } else {
       await registerSuperAdmin();
@@ -99,8 +99,8 @@ async function registerSuperAdmin() {
     });
     if (regRes.ok) {
       const regData = await regRes.json();
-      localStorage.setItem('cmt_super_token', regData.accessToken);
-      localStorage.setItem('cmt_super_user', JSON.stringify(regData.user));
+      localStorage.setItem('ticketr_super_token', regData.accessToken);
+      localStorage.setItem('ticketr_super_user', JSON.stringify(regData.user));
       useRouter().push('/dashboard');
     } else {
       const err = await regRes.json();

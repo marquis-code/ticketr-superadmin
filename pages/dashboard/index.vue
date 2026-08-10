@@ -1,24 +1,24 @@
 <template>
-  <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+  <div class="min-h-screen   flex flex-col">
     <!-- Navbar -->
-    <header class="glass-card border-b border-slate-800/80 px-6 py-4 sticky top-0 z-40">
+    <header class="glass-card border-b border-gray-200/80 px-6 py-4 sticky top-0 z-40">
       <div class="max-w-7xl mx-auto flex items-center justify-between">
         <div class="flex items-center space-x-6">
           <NuxtLink to="/dashboard" class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-emerald-500/20">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-xl text-gray-900">
               👑
             </div>
             <div>
-              <span class="font-bold text-lg text-white block">CMultiTickets Super Admin</span>
+              <span class="font-bold text-lg text-gray-900 block">Ticketr Super Admin</span>
               <span class="text-xs text-emerald-400 font-medium">Global Platform Control</span>
             </div>
           </NuxtLink>
 
           <!-- Nav Tabs -->
           <nav class="hidden md:flex items-center space-x-4 text-xs font-semibold">
-            <NuxtLink to="/dashboard" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg">Overview</NuxtLink>
-            <NuxtLink to="/dashboard/events" class="text-slate-400 hover:text-white px-3 py-1.5 rounded-lg transition">Global Events</NuxtLink>
-            <NuxtLink to="/dashboard/transactions" class="text-slate-400 hover:text-white px-3 py-1.5 rounded-lg transition">Global Transactions</NuxtLink>
+            <NuxtLink to="/dashboard" class="bg-primary text-white px-3 py-1.5 rounded-lg">Overview</NuxtLink>
+            <NuxtLink to="/dashboard/events" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg transition">Global Events</NuxtLink>
+            <NuxtLink to="/dashboard/transactions" class="text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg transition">Global Transactions</NuxtLink>
           </nav>
         </div>
 
@@ -26,7 +26,7 @@
           <button @click="showAddModal = true" class="btn-primary text-xs !py-2 !px-3.5 flex items-center gap-1">
             <span>+ Onboard Tenant</span>
           </button>
-          <button @click="logout" class="text-xs text-slate-400 hover:text-white px-3 py-2">
+          <button @click="logout" class="text-xs text-gray-600 hover:text-gray-900 px-3 py-2">
             Logout
           </button>
         </div>
@@ -38,50 +38,50 @@
       <!-- Global KPIs -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="glass-card rounded-2xl p-6 border-emerald-500/20">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Global Platform GMV</span>
-          <div class="text-3xl font-extrabold text-white">
+          <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider block mb-1">Global Platform GMV</span>
+          <div class="text-3xl font-extrabold text-gray-900">
             ₦{{ (analytics?.globalGMV || 0).toLocaleString() }}
           </div>
           <span class="text-[11px] text-emerald-400 font-medium block mt-2">Across all organizations</span>
         </div>
 
         <div class="glass-card rounded-2xl p-6 border-emerald-500/20">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Onboarded Tenants</span>
-          <div class="text-3xl font-extrabold text-white">
+          <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider block mb-1">Onboarded Tenants</span>
+          <div class="text-3xl font-extrabold text-gray-900">
             {{ tenants.length }}
           </div>
           <span class="text-[11px] text-teal-400 font-medium block mt-2">Active Organizations</span>
         </div>
 
         <div class="glass-card rounded-2xl p-6 border-emerald-500/20">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Global Events</span>
-          <div class="text-3xl font-extrabold text-white">
+          <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider block mb-1">Global Events</span>
+          <div class="text-3xl font-extrabold text-gray-900">
             {{ analytics?.totalEvents || 0 }}
           </div>
-          <span class="text-[11px] text-slate-400 font-medium block mt-2">Total Published Events</span>
+          <span class="text-[11px] text-gray-600 font-medium block mt-2">Total Published Events</span>
         </div>
 
         <div class="glass-card rounded-2xl p-6 border-emerald-500/20">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Tickets Issued</span>
-          <div class="text-3xl font-extrabold text-white">
+          <span class="text-xs font-semibold text-gray-600 uppercase tracking-wider block mb-1">Tickets Issued</span>
+          <div class="text-3xl font-extrabold text-gray-900">
             {{ analytics?.totalTicketsSold || 0 }}
           </div>
-          <span class="text-[11px] text-indigo-400 font-medium block mt-2">Global Ticket Volume</span>
+          <span class="text-[11px] text-primary font-medium block mt-2">Global Ticket Volume</span>
         </div>
       </div>
 
       <!-- Tenants Management Table -->
       <div class="glass-card rounded-2xl p-6">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold text-white">Tenant Organizations</h2>
+          <h2 class="text-xl font-bold text-gray-900">Tenant Organizations</h2>
           <button @click="showAddModal = true" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300">
             + Add New Tenant
           </button>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-slate-300">
-            <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-800">
+          <table class="w-full text-left text-sm text-gray-700">
+            <thead class="/60 text-xs uppercase text-gray-600 border-b border-gray-200">
               <tr>
                 <th class="py-3 px-4">Organization Name</th>
                 <th class="py-3 px-4">Slug / Subdomain</th>
@@ -91,14 +91,14 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/60">
-              <tr v-for="t in tenants" :key="t._id" class="hover:bg-slate-900/40 transition">
-                <td class="py-4 px-4 font-semibold text-white">
+              <tr v-for="t in tenants" :key="t._id" class="hover:/40 transition">
+                <td class="py-4 px-4 font-semibold text-gray-900">
                   {{ t.name }}
                 </td>
                 <td class="py-4 px-4 font-mono text-xs text-emerald-400">
-                  {{ t.slug }}.cmultickets.com
+                  {{ t.slug }}.ticketr.org
                 </td>
-                <td class="py-4 px-4 text-xs text-slate-400">
+                <td class="py-4 px-4 text-xs text-gray-600">
                   {{ t.contactEmail }}
                 </td>
                 <td class="py-4 px-4">
@@ -113,7 +113,7 @@
                   <button
                     @click="toggleStatus(t)"
                     class="text-xs font-semibold px-3 py-1 rounded-lg border transition"
-                    :class="t.status === 'ACTIVE' ? 'border-rose-500/40 text-rose-400 hover:bg-rose-500/10' : 'border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10'"
+                    :class="t.status === 'ACTIVE' ? 'border-rose-500/40 text-rose-400 hover:bg-rose-500/10' : 'border-emerald-500/40 text-emerald-400 hover:bg-primary-700/10'"
                   >
                     {{ t.status === 'ACTIVE' ? 'Suspend' : 'Activate' }}
                   </button>
@@ -126,48 +126,48 @@
     </main>
 
     <!-- Modal for Adding Tenant -->
-    <div v-if="showAddModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-6">
+    <div v-if="showAddModal" class="fixed inset-0 z-50 /80 backdrop-blur-sm flex items-center justify-center p-6">
       <div class="w-full max-w-md glass-card rounded-2xl p-6 border-emerald-500/30">
-        <h3 class="text-xl font-bold text-white mb-4">Onboard New Organization Tenant</h3>
+        <h3 class="text-xl font-bold text-gray-900 mb-4">Onboard New Organization Tenant</h3>
 
         <form @submit.prevent="createTenant" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Organization Name</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Organization Name</label>
             <input
               v-model="newTenant.name"
               type="text"
               placeholder="e.g. School of Nursing"
               required
-              class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+              class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Subdomain Slug</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Subdomain Slug</label>
             <div class="flex items-center">
               <input
                 v-model="newTenant.slug"
                 type="text"
                 placeholder="nursing"
                 required
-                class="w-full bg-slate-900 border border-slate-800 rounded-l-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+                class="w-full  border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
               />
-              <span class="bg-slate-800 border border-l-0 border-slate-800 text-slate-400 text-xs px-3 py-3 rounded-r-xl">.cmultickets.com</span>
+              <span class="bg-gray-100 border border-l-0 border-gray-200 text-gray-600 text-xs px-3 py-3 rounded-r-xl">.ticketr.org</span>
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Contact Email</label>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Contact Email</label>
             <input
               v-model="newTenant.contactEmail"
               type="email"
               placeholder="admin@nursing.edu"
               required
-              class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500"
+              class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
-          <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
             <button type="button" @click="showAddModal = false" class="btn-secondary text-xs">
               Cancel
             </button>
@@ -197,13 +197,13 @@ const newTenant = ref({
 });
 
 function logout() {
-  localStorage.removeItem('cmt_super_token');
-  localStorage.removeItem('cmt_super_user');
+  localStorage.removeItem('ticketr_super_token');
+  localStorage.removeItem('ticketr_super_user');
   useRouter().push('/login');
 }
 
 async function loadData() {
-  const token = localStorage.getItem('cmt_super_token');
+  const token = localStorage.getItem('ticketr_super_token');
   if (!token) {
     useRouter().push('/login');
     return;
@@ -227,7 +227,7 @@ async function loadData() {
 }
 
 async function createTenant() {
-  const token = localStorage.getItem('cmt_super_token');
+  const token = localStorage.getItem('ticketr_super_token');
   try {
     const res = await fetch(`${config.public.apiBase}/tenants`, {
       method: 'POST',
@@ -252,7 +252,7 @@ async function createTenant() {
 }
 
 async function toggleStatus(t) {
-  const token = localStorage.getItem('cmt_super_token');
+  const token = localStorage.getItem('ticketr_super_token');
   const nextStatus = t.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
   try {
     const res = await fetch(`${config.public.apiBase}/tenants/${t._id}/status`, {
