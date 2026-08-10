@@ -26,7 +26,7 @@
         <p class="text-xs text-gray-600 mt-1">Monitor platform GMV across all tenants and Paystack transaction references.</p>
       </div>
 
-      <div class="glass-card rounded-2xl p-6">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div v-if="loading" class="text-center py-12 text-gray-500 text-sm">
           Loading global transactions...
         </div>
@@ -36,25 +36,25 @@
         </div>
 
         <div v-else class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-700">
-            <thead class="/60 text-xs uppercase text-gray-600 border-b border-gray-200">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
+            <thead class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
               <tr>
-                <th class="py-3 px-4">Order Number</th>
-                <th class="py-3 px-4">Tenant / Organization</th>
-                <th class="py-3 px-4">Customer Email</th>
-                <th class="py-3 px-4">Amount</th>
-                <th class="py-3 px-4">Paystack Ref</th>
-                <th class="py-3 px-4">Status</th>
+                <th class="px-6 py-4">Order Number</th>
+                <th class="px-6 py-4">Tenant / Organization</th>
+                <th class="px-6 py-4">Customer Email</th>
+                <th class="px-6 py-4">Amount</th>
+                <th class="px-6 py-4">Paystack Ref</th>
+                <th class="px-6 py-4">Status</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-800/60">
-              <tr v-for="o in orders" :key="o._id" class="hover:/40 transition">
-                <td class="py-4 px-4 font-mono text-xs text-emerald-400">{{ o.orderNumber }}</td>
-                <td class="py-4 px-4 font-semibold text-gray-900">{{ o.tenantId?.name || 'Tenant' }}</td>
-                <td class="py-4 px-4 text-xs text-gray-600">{{ o.customerEmail }}</td>
-                <td class="py-4 px-4 font-extrabold text-gray-900">₦{{ o.totalAmount?.toLocaleString() }}</td>
-                <td class="py-4 px-4 font-mono text-xs text-gray-600">{{ o.paystackReference }}</td>
-                <td class="py-4 px-4">
+            <tbody class="divide-y divide-gray-100 bg-white">
+              <tr v-for="o in orders" :key="o._id" class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 font-mono text-xs text-emerald-400">{{ o.orderNumber }}</td>
+                <td class="px-6 py-4 font-semibold text-gray-900">{{ o.tenantId?.name || 'Tenant' }}</td>
+                <td class="px-6 py-4 text-xs text-gray-600">{{ o.customerEmail }}</td>
+                <td class="px-6 py-4 font-extrabold text-gray-900">₦{{ o.totalAmount?.toLocaleString() }}</td>
+                <td class="px-6 py-4 font-mono text-xs text-gray-600">{{ o.paystackReference }}</td>
+                <td class="px-6 py-4">
                   <span
                     :class="o.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
                     class="px-2.5 py-1 rounded-full text-[11px] font-semibold border"

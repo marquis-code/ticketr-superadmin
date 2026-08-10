@@ -71,7 +71,7 @@
       </div>
 
       <!-- Tenants Management Table -->
-      <div class="glass-card rounded-2xl p-6">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-xl font-bold text-gray-900">Tenant Organizations</h2>
           <button @click="showAddModal = true" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300">
@@ -80,28 +80,28 @@
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-700">
-            <thead class="/60 text-xs uppercase text-gray-600 border-b border-gray-200">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
+            <thead class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
               <tr>
-                <th class="py-3 px-4">Organization Name</th>
-                <th class="py-3 px-4">Slug / Subdomain</th>
-                <th class="py-3 px-4">Contact Email</th>
-                <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4 text-right">Actions</th>
+                <th class="px-6 py-4">Organization Name</th>
+                <th class="px-6 py-4">Slug / Subdomain</th>
+                <th class="px-6 py-4">Contact Email</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-800/60">
-              <tr v-for="t in tenants" :key="t._id" class="hover:/40 transition">
-                <td class="py-4 px-4 font-semibold text-gray-900">
+            <tbody class="divide-y divide-gray-100 bg-white">
+              <tr v-for="t in tenants" :key="t._id" class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 font-semibold text-gray-900">
                   {{ t.name }}
                 </td>
-                <td class="py-4 px-4 font-mono text-xs text-emerald-400">
+                <td class="px-6 py-4 font-mono text-xs text-emerald-400">
                   {{ t.slug }}.ticketr.org
                 </td>
-                <td class="py-4 px-4 text-xs text-gray-600">
+                <td class="px-6 py-4 text-xs text-gray-600">
                   {{ t.contactEmail }}
                 </td>
-                <td class="py-4 px-4">
+                <td class="px-6 py-4">
                   <span
                     :class="t.status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'"
                     class="px-2.5 py-1 rounded-full text-[11px] font-semibold border"
@@ -109,7 +109,7 @@
                     {{ t.status }}
                   </span>
                 </td>
-                <td class="py-4 px-4 text-right">
+                <td class="px-6 py-4 text-right">
                   <button
                     @click="toggleStatus(t)"
                     class="text-xs font-semibold px-3 py-1 rounded-lg border transition"

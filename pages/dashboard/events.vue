@@ -26,7 +26,7 @@
         <p class="text-xs text-gray-600 mt-1">Audit published events across all onboarded institutions and organizations.</p>
       </div>
 
-      <div class="glass-card rounded-2xl p-6">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <div v-if="loading" class="text-center py-12 text-gray-500 text-sm">
           Loading global events...
         </div>
@@ -36,30 +36,30 @@
         </div>
 
         <div v-else class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-700">
-            <thead class="/60 text-xs uppercase text-gray-600 border-b border-gray-200">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
+            <thead class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
               <tr>
-                <th class="py-3 px-4">Event Title</th>
-                <th class="py-3 px-4">Organization / Tenant</th>
-                <th class="py-3 px-4">Date</th>
-                <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4">Markup</th>
-                <th class="py-3 px-4">Actions</th>
+                <th class="px-6 py-4">Event Title</th>
+                <th class="px-6 py-4">Organization / Tenant</th>
+                <th class="px-6 py-4">Date</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4">Markup</th>
+                <th class="px-6 py-4">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-800/60">
-              <tr v-for="ev in events" :key="ev._id" class="hover:/40 transition">
-                <td class="py-4 px-4 font-semibold text-gray-900">{{ ev.title }}</td>
-                <td class="py-4 px-4 font-mono text-xs text-emerald-400">
+            <tbody class="divide-y divide-gray-100 bg-white">
+              <tr v-for="ev in events" :key="ev._id" class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 font-semibold text-gray-900">{{ ev.title }}</td>
+                <td class="px-6 py-4 font-mono text-xs text-emerald-400">
                   {{ ev.tenantId?.name || 'Tenant' }} ({{ ev.tenantId?.slug || 'slug' }})
                 </td>
-                <td class="py-4 px-4 text-xs text-gray-600">{{ new Date(ev.startDate).toLocaleDateString() }}</td>
-                <td class="py-4 px-4">
+                <td class="px-6 py-4 text-xs text-gray-600">{{ new Date(ev.startDate).toLocaleDateString() }}</td>
+                <td class="px-6 py-4">
                   <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     {{ ev.status }}
                   </span>
                 </td>
-                <td class="py-4 px-4">
+                <td class="px-6 py-4">
                   <span class="text-xs font-semibold text-gray-900 block">
                     {{ ev.markupFeeType === 'PERCENTAGE' ? ev.markupFee + '%' : '₦' + ev.markupFee }}
                   </span>
@@ -67,7 +67,7 @@
                     {{ ev.markupStrategy === 'ADD_TO_FEE' ? 'Added to price' : 'Deducted from fee' }}
                   </span>
                 </td>
-                <td class="py-4 px-4">
+                <td class="px-6 py-4">
                   <button @click="openMarkupModal(ev)" class="text-[11px] text-primary hover:bg-primary/10 border border-primary/30 font-semibold py-1.5 px-3 rounded-lg transition">
                     Configure Markup
                   </button>
