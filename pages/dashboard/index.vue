@@ -26,7 +26,7 @@
           <button @click="showAddModal = true" class="btn-primary text-xs !py-2 !px-3.5 flex items-center gap-1">
             <span>+ Onboard Tenant</span>
           </button>
-          <button @click="logout" class="text-xs text-gray-600 hover:text-gray-900 px-3 py-2">
+          <button @click="showLogoutModal = true" class="text-xs text-gray-600 hover:text-gray-900 px-3 py-2">
             Logout
           </button>
         </div>
@@ -179,9 +179,21 @@
       </div>
     </div>
   </div>
-</template>
 
+    <!-- Logout Confirmation Modal -->
+    <div v-if="showLogoutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+      <div class="bg-white border border-gray-200 w-full max-w-sm p-6 rounded-2xl relative shadow-xl">
+        <h3 class="text-lg font-bold text-gray-900 mb-2">Confirm Logout</h3>
+        <p class="text-sm text-gray-500 mb-6">Are you sure you want to sign out of your account?</p>
+        <div class="flex justify-end gap-3">
+          <button @click="showLogoutModal = false" class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Cancel</button>
+          <button @click="confirmLogout" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition">Yes, Logout</button>
+        </div>
+      </div>
+    </div>
+</template>
 <script setup>
+import { toast } from 'vue-sonner';
 import { ref, onMounted } from 'vue';
 
 const config = useRuntimeConfig();
@@ -196,7 +208,9 @@ const newTenant = ref({
   contactEmail: '',
 });
 
-function logout() {
+const showLogoutModal = ref(false);
+
+function confirmLogout() {
   localStorage.removeItem('ticketr_super_token');
   localStorage.removeItem('ticketr_super_user');
   useRouter().push('/login');
@@ -244,10 +258,10 @@ async function createTenant() {
       await loadData();
     } else {
       const err = await res.json();
-      alert(err.message || 'Failed to create tenant');
+      toast.error(err.message || 'Failed to create tenant');
     }
   } catch (err) {
-    alert('Network error while creating tenant');
+    toast.error('Network error while creating tenant');
   }
 }
 
