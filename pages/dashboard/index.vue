@@ -72,9 +72,9 @@
 
       <!-- Tenants Management Table -->
       <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold text-gray-900">Tenant Organizations</h2>
-          <button @click="showAddModal = true" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300">
+        <div class="flex items-center justify-between px-6 py-5 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-gray-900">Tenant Organizations</h2>
+          <button @click="showAddModal = true" class="text-xs font-semibold bg-emerald-50 text-emerald-600 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition">
             + Add New Tenant
           </button>
         </div>
