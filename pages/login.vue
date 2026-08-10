@@ -23,13 +23,23 @@
 
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Password</label>
-          <input
-            v-model="password"
-            type="password"
-            placeholder="••••••••"
-            required
-            class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition"
-          />
+          <div class="relative">
+            <input
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="••••••••"
+              required
+              class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition pr-10"
+            />
+            <button
+              type="button"
+              @click="showPassword = !showPassword"
+              class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+            >
+              <Eye v-if="!showPassword" class="w-4 h-4" />
+              <EyeOff v-else class="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <div v-if="errorMsg" class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
@@ -47,12 +57,14 @@
 
 <script setup>
 import { ref } from 'vue';
+import { Eye, EyeOff } from 'lucide-vue-next';
 
 const config = useRuntimeConfig();
 const email = ref('');
 const password = ref('');
 const submitting = ref(false);
 const errorMsg = ref('');
+const showPassword = ref(false);
 
 async function handleLogin() {
   submitting.value = true;
