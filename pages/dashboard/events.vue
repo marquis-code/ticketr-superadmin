@@ -96,19 +96,25 @@
             </div>
             <div>
               <label class="block text-[11px] font-medium text-gray-600 mb-1">Fee Type</label>
-              <select v-model="markupForm.markupFeeType" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary">
-                <option value="FLAT">Flat (₦)</option>
-                <option value="PERCENTAGE">Percentage (%)</option>
-              </select>
+              <CustomDropdown
+                v-model="markupForm.markupFeeType"
+                :options="[
+                  { label: 'Flat (₦)', value: 'FLAT' },
+                  { label: 'Percentage (%)', value: 'PERCENTAGE' }
+                ]"
+              />
             </div>
           </div>
           
           <div>
             <label class="block text-[11px] font-medium text-gray-600 mb-1">Strategy</label>
-            <select v-model="markupForm.markupStrategy" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary">
-              <option value="ADD_TO_FEE">Add to Ticket Price (Customer pays)</option>
-              <option value="DEDUCT_FROM_FEE">Deduct from Ticket Price (Organizer pays)</option>
-            </select>
+            <CustomDropdown
+              v-model="markupForm.markupStrategy"
+              :options="[
+                { label: 'Add to Ticket Price (Customer pays)', value: 'ADD_TO_FEE' },
+                { label: 'Deduct from Ticket Price (Organizer pays)', value: 'DEDUCT_FROM_FEE' }
+              ]"
+            />
             <p class="text-[10px] text-gray-400 mt-1">
               If added, the customer pays more and we keep the markup. If deducted, the customer pays the normal price, but the tenant's payout is reduced by the markup. Paystack fees are settled from the business wallet.
             </p>
