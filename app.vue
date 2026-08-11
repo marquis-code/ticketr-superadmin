@@ -1,6 +1,6 @@
 <template>
-  <Toaster position="top-right" richColors />
   <div class="min-h-screen w-full flex flex-col bg-gray-50">
+    <Toaster position="top-right" richColors />
     <NuxtLayout>
       <NuxtPage class="flex-grow flex flex-col" />
     </NuxtLayout>
