@@ -2,8 +2,8 @@
   <div class="min-h-screen   flex items-center justify-center p-6">
     <div class="w-full max-w-md glass-card rounded-2xl p-8 border-emerald-500/30">
       <div class="text-center mb-8">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-2xl text-gray-900 mx-auto mb-3">
-          👑
+        <div class="flex items-center justify-center mb-6">
+          <img src="https://res.cloudinary.com/marquis/image/upload/v1786452024/ticketr_djxoz9.png" alt="Ticketr Logo" class="h-10 w-auto" />
         </div>
         <h1 class="text-2xl font-extrabold text-gray-900">Super Admin Command Center</h1>
         <p class="text-xs text-gray-600 mt-1">Ticketr Platform Control & Tenant Management</p>
