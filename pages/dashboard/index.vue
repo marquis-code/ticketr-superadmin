@@ -56,6 +56,7 @@
                 <th class="px-6 py-4">Organization Name</th>
                 <th class="px-6 py-4">Slug / Subdomain</th>
                 <th class="px-6 py-4">Contact Email</th>
+                <th class="px-6 py-4">Payment Mode</th>
                 <th class="px-6 py-4">Status</th>
                 <th class="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -70,6 +71,16 @@
                 </td>
                 <td class="px-6 py-4 text-xs text-gray-600">
                   {{ t.contactEmail }}
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    @click="togglePaymentMethod(t)"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold border transition cursor-pointer"
+                    :class="t.paymentMethod === 'MANUAL_TRANSFER' ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100' : 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100'"
+                  >
+                    <span class="w-2 h-2 rounded-full" :class="t.paymentMethod === 'MANUAL_TRANSFER' ? 'bg-amber-500' : 'bg-indigo-500'"></span>
+                    {{ t.paymentMethod === 'MANUAL_TRANSFER' ? 'Bank Transfer' : 'Paystack' }}
+                  </button>
                 </td>
                 <td class="px-6 py-4">
                   <span
@@ -161,6 +172,18 @@
         </div>
       </div>
     </div>
+
+    <!-- Generic Confirmation Modal -->
+    <div v-if="confirmModal.show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
+      <div class="bg-white border border-gray-200 w-full max-w-sm p-6 rounded-2xl relative shadow-xl">
+        <h3 class="text-lg font-bold text-gray-900 mb-2">{{ confirmModal.title }}</h3>
+        <p class="text-sm text-gray-500 mb-6">{{ confirmModal.message }}</p>
+        <div class="flex justify-end gap-3">
+          <button @click="confirmModal.show = false" class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Cancel</button>
+          <button @click="confirmModal.onConfirm(); confirmModal.show = false" class="px-4 py-2 text-sm font-semibold text-white rounded-lg transition" :class="confirmModal.variant === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-emerald-600 hover:bg-emerald-700'">{{ confirmModal.confirmText || 'Confirm' }}</button>
+        </div>
+      </div>
+    </div>
 </template>
 <script setup>
 definePageMeta({ layout: 'superadmin' });
@@ -181,6 +204,19 @@ const newTenant = ref({
 });
 
 const showLogoutModal = ref(false);
+
+const confirmModal = ref({
+  show: false,
+  title: '',
+  message: '',
+  confirmText: 'Confirm',
+  variant: 'primary',
+  onConfirm: () => {},
+});
+
+function showConfirm({ title, message, confirmText, variant, onConfirm }) {
+  confirmModal.value = { show: true, title, message, confirmText: confirmText || 'Confirm', variant: variant || 'primary', onConfirm };
+}
 
 function confirmLogout() {
   localStorage.removeItem('ticketr_super_token');
@@ -235,6 +271,36 @@ async function createTenant() {
   } catch (err) {
     toast.error('Network error while creating tenant');
   }
+}
+
+async function togglePaymentMethod(t) {
+  const next = t.paymentMethod === 'MANUAL_TRANSFER' ? 'PAYSTACK' : 'MANUAL_TRANSFER';
+  const label = next === 'MANUAL_TRANSFER' ? 'Bank Transfer' : 'Paystack';
+  showConfirm({
+    title: 'Switch Payment Mode',
+    message: `Switch "${t.name}" to "${label}" payment mode? This will affect how buyers pay for tickets.`,
+    confirmText: `Switch to ${label}`,
+    variant: 'primary',
+    onConfirm: async () => {
+      const token = localStorage.getItem('ticketr_super_token');
+      try {
+        const res = await fetch(`${config.public.apiBase}/tenants/${t._id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ paymentMethod: next }),
+        });
+        if (res.ok) {
+          toast.success(`${t.name} switched to ${label}`);
+          await loadData();
+        }
+      } catch (e) {
+        toast.error('Failed to update payment method');
+      }
+    }
+  });
 }
 
 async function toggleStatus(t) {
