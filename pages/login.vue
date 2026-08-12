@@ -57,8 +57,6 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Eye, EyeOff } from 'lucide-vue-next';
-
 const config = useRuntimeConfig();
 const email = ref('');
 const password = ref('');
