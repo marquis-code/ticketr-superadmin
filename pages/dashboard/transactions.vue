@@ -26,17 +26,22 @@
                 <th class="px-6 py-4">Tenant / Organization</th>
                 <th class="px-6 py-4">Customer Email</th>
                 <th class="px-6 py-4">Amount</th>
-                <th class="px-6 py-4">Paystack Ref</th>
+                <th class="px-6 py-4">Reference / Session ID</th>
                 <th class="px-6 py-4">Status</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 bg-white">
               <tr v-for="o in orders" :key="o._id" class="hover:bg-gray-50 transition-colors duration-150">
-                <td class="px-6 py-4 font-mono text-xs text-emerald-400">{{ o.orderNumber }}</td>
+                <td class="px-6 py-4 font-mono text-xs text-indigo-600 font-semibold">{{ o.orderNumber }}</td>
                 <td class="px-6 py-4 font-semibold text-gray-900">{{ o.tenantId?.name || 'Tenant' }}</td>
                 <td class="px-6 py-4 text-xs text-gray-600">{{ o.customerEmail }}</td>
                 <td class="px-6 py-4 font-extrabold text-gray-900">₦{{ o.totalAmount?.toLocaleString() }}</td>
-                <td class="px-6 py-4 font-mono text-xs text-gray-600">{{ o.paystackReference }}</td>
+                <td class="px-6 py-4 font-mono text-xs text-gray-600">
+                  <span v-if="o.bankReference" class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200 text-[10px] font-semibold">
+                    Bank: {{ o.bankReference }}
+                  </span>
+                  <span v-else>{{ o.paystackReference || 'N/A' }}</span>
+                </td>
                 <td class="px-6 py-4">
                   <span
                     :class="o.status === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'"
