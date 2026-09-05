@@ -24,6 +24,9 @@
         <NuxtLink to="/dashboard/transactions" class="nav-link" active-class="nav-link-active" @click="isSidebarOpen = false">
           Global Transactions
         </NuxtLink>
+        <NuxtLink to="/dashboard/email-logs" class="nav-link" active-class="nav-link-active" @click="isSidebarOpen = false">
+          Email Logs
+        </NuxtLink>
       </nav>
 
       <div class="p-4 border-t border-gray-200 bg-gray-50/50">
