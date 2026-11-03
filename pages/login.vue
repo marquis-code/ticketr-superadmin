@@ -1,123 +1,113 @@
 <template>
-  <div class="min-h-screen   flex items-center justify-center p-6">
-    <div class="w-full max-w-md glass-card rounded-2xl p-8 border-emerald-500/30">
-      <div class="text-center mb-8">
-        <div class="flex items-center justify-center mb-6">
-          <img src="https://res.cloudinary.com/marquis/image/upload/v1786452024/ticketr_djxoz9.png" alt="Ticketr Logo" class="h-10 w-auto" />
+  <div class="min-h-screen grid lg:grid-cols-[1fr_1.05fr] bg-paper">
+    <div class="flex flex-col justify-center px-5 sm:px-10 lg:px-16 py-10">
+      <div class="w-full max-w-md mx-auto">
+        <div class="flex items-center gap-2.5 mb-10">
+          <span class="w-9 h-9 rounded-xl bg-ink flex items-center justify-center">
+            <ShieldCheck class="w-[18px] h-[18px] text-lime" />
+          </span>
+          <span class="font-display text-[22px] font-semibold tracking-[-0.04em] text-ink">ticketr.</span>
+          <span class="chip-muted !text-[9px]">Platform</span>
         </div>
-        <h1 class="text-2xl font-extrabold text-gray-900">Super Admin Command Center</h1>
-        <p class="text-xs text-gray-600 mt-1">Ticketr Platform Control & Tenant Management</p>
+
+        <h1 class="font-display text-3xl sm:text-4xl font-semibold text-ink tracking-[-0.03em]">Platform control.</h1>
+        <p class="text-sm text-muted mt-2">Super admin access only. Accounts are provisioned by the platform team.</p>
+
+        <form class="mt-8 space-y-4" @submit.prevent="submit">
+          <div>
+            <label class="label" for="email">Email</label>
+            <input id="email" v-model.trim="email" type="email" required autocomplete="email" class="input !py-3.5" placeholder="admin@ticketr.org" />
+          </div>
+          <div>
+            <label class="label" for="password">Password</label>
+            <div class="relative">
+              <input id="password" v-model="password" :type="show ? 'text' : 'password'" required autocomplete="current-password" class="input !py-3.5 !pr-12" placeholder="••••••••" />
+              <button type="button" class="absolute inset-y-0 right-0 px-4 text-muted hover:text-ink" :aria-label="show ? 'Hide password' : 'Show password'" @click="show = !show">
+                <EyeOff v-if="show" class="w-4 h-4" />
+                <Eye v-else class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <p v-if="error" class="text-[12.5px] font-medium text-coral bg-coral/10 border border-coral/20 rounded-lg px-3.5 py-2.5">{{ error }}</p>
+          <button type="submit" class="btn-primary w-full !py-3.5" :disabled="loading">
+            <span v-if="loading" class="w-4 h-4 border-2 border-paper/40 border-t-paper rounded-full animate-spin" />
+            {{ loading ? 'Authenticating…' : 'Sign in' }}
+          </button>
+        </form>
+
+        <p class="text-[11px] text-muted mt-6">
+          Not a platform admin? <a :href="publicUrl" class="font-semibold text-forest hover:underline">Return to ticketr.org</a>
+        </p>
       </div>
+    </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-gray-600 mb-1">Super Admin Email</label>
-          <input
-            v-model="email"
-            type="email"
-            placeholder="markeyz.code@gmail.com"
-            required
-            class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition"
-          />
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-gray-600 mb-1">Password</label>
-          <div class="relative">
-            <input
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              placeholder="••••••••"
-              required
-              class="w-full  border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-emerald-500 transition pr-10"
-            />
-            <button
-              type="button"
-              @click="showPassword = !showPassword"
-              class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
-            >
-              <Eye v-if="!showPassword" class="w-4 h-4" />
-              <EyeOff v-else class="w-4 h-4" />
-            </button>
+    <aside class="hidden lg:flex relative overflow-hidden bg-ink">
+      <div class="absolute inset-0 bg-grid opacity-[0.12]" />
+      <div class="absolute -bottom-40 -right-20 w-[520px] h-[520px] rounded-full bg-lime/15 blur-[130px]" />
+      <div class="relative flex flex-col justify-center p-12 xl:p-16 w-full">
+        <span class="chip-ink !bg-white/10 !text-paper !border-white/15 w-fit">Trust layer controls</span>
+        <h2 class="font-display text-[2.5rem] leading-[1.05] font-semibold text-paper tracking-[-0.035em] mt-5">
+          The whole platform,<br /><span class="text-lime">in one quiet room.</span>
+        </h2>
+        <p class="text-sm text-paper/60 mt-5 max-w-sm leading-relaxed">
+          Organizers, events, GMV, platform fees and email deliverability — with every privileged action written to an audit trail.
+        </p>
+        <div class="mt-8 grid grid-cols-2 gap-3 max-w-sm">
+          <div class="rounded-xl border border-white/10 bg-white/[0.05] p-4">
+            <p class="text-[10px] uppercase tracking-[0.14em] text-paper/40 font-bold">Reconciliation</p>
+            <p class="text-paper text-[13px] font-semibold mt-1">Per-order fees</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/[0.05] p-4">
+            <p class="text-[10px] uppercase tracking-[0.14em] text-paper/40 font-bold">Security</p>
+            <p class="text-paper text-[13px] font-semibold mt-1">Role-gated access</p>
           </div>
         </div>
-
-        <div v-if="errorMsg" class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
-          {{ errorMsg }}
-        </div>
-
-        <button type="submit" :disabled="submitting" class="w-full btn-primary py-3 text-sm flex items-center justify-center gap-2">
-          <span v-if="submitting" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-          <span>{{ submitting ? 'Authenticating...' : 'Sign In as Super Admin' }}</span>
-        </button>
-      </form>
-    </div>
+      </div>
+    </aside>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { Eye, EyeOff, ShieldCheck } from 'lucide-vue-next';
+
+definePageMeta({ layout: false });
+
+const route = useRoute();
 const config = useRuntimeConfig();
+const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+
 const email = ref('');
 const password = ref('');
-const submitting = ref(false);
-const errorMsg = ref('');
-const showPassword = ref(false);
+const loading = ref(false);
+const error = ref('');
+const show = ref(false);
 
-async function handleLogin() {
-  submitting.value = true;
-  errorMsg.value = '';
-
+async function submit() {
+  error.value = '';
+  loading.value = true;
   try {
-    const res = await fetch(`${config.public.apiBase}/auth/login`, {
+    const data = await apiRequest<any>('/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, password: password.value }),
+      auth: false,
+      body: { email: email.value, password: password.value },
     });
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data.user.role !== 'SUPER_ADMIN') {
-        // Create super admin if first time
-        await registerSuperAdmin();
-        return;
-      }
-      localStorage.setItem('ticketr_super_token', data.accessToken);
-      localStorage.setItem('ticketr_super_user', JSON.stringify(data.user));
-      useRouter().push('/dashboard');
-    } else {
-      await registerSuperAdmin();
+    if (data?.user?.role !== 'SUPER_ADMIN') {
+      error.value = 'This account does not have platform admin access.';
+      return;
     }
+    localStorage.setItem('ticketr_super_token', data.accessToken);
+    localStorage.setItem('ticketr_super_user', JSON.stringify(data.user));
+    const redirect =
+      typeof route.query.redirect === 'string' && route.query.redirect.startsWith('/dashboard')
+        ? route.query.redirect
+        : '/dashboard';
+    await navigateTo(redirect);
   } catch (err) {
-    errorMsg.value = 'Connection error';
+    error.value = errorMessage(err, 'Invalid email or password.');
   } finally {
-    submitting.value = false;
+    loading.value = false;
   }
 }
 
-async function registerSuperAdmin() {
-  try {
-    const regRes = await fetch(`${config.public.apiBase}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: 'Platform Administrator',
-        email: email.value,
-        password: password.value,
-        role: 'SUPER_ADMIN',
-      }),
-    });
-    if (regRes.ok) {
-      const regData = await regRes.json();
-      localStorage.setItem('ticketr_super_token', regData.accessToken);
-      localStorage.setItem('ticketr_super_user', JSON.stringify(regData.user));
-      useRouter().push('/dashboard');
-    } else {
-      const err = await regRes.json();
-      errorMsg.value = err.message || 'Super admin login failed';
-    }
-  } catch (e) {
-    errorMsg.value = 'Failed to register Super Admin account';
-  }
-}
+useSeoMeta({ title: 'Platform sign in | Ticketr', robots: 'noindex, nofollow' });
 </script>

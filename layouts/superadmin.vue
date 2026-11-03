@@ -1,134 +1,129 @@
 <template>
-  <div class="min-h-screen flex bg-[#f8fafc]">
-    <!-- Mobile Sidebar Backdrop -->
-    <div v-if="isSidebarOpen" @click="isSidebarOpen = false" class="fixed inset-0 bg-gray-900/50 z-40 lg:hidden"></div>
+  <div class="min-h-screen bg-paper flex">
+    <div v-if="mobileOpen" class="fixed inset-0 bg-ink/50 z-40 lg:hidden" @click="mobileOpen = false" />
 
-    <!-- Sidebar -->
-    <aside :class="['fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ease-in-out', isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0']">
-      <div class="h-16 px-6 border-b border-gray-200 flex items-center justify-between shrink-0">
-        <NuxtLink to="/dashboard" class="flex items-center gap-2" @click="isSidebarOpen = false">
-          <img src="https://res.cloudinary.com/marquis/image/upload/v1786452024/ticketr_djxoz9.png" alt="Ticketr" class="h-7 w-auto" />
+    <aside
+      class="fixed lg:sticky top-0 left-0 z-50 h-screen w-[250px] bg-ink text-paper flex flex-col transition-transform duration-300 shrink-0"
+      :class="mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+    >
+      <div class="h-[68px] px-4 flex items-center justify-between border-b border-white/10">
+        <NuxtLink to="/dashboard" class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-lime flex items-center justify-center">
+            <ShieldCheck class="w-[18px] h-[18px] text-ink" />
+          </span>
+          <div>
+            <p class="font-display text-[18px] font-semibold tracking-[-0.04em] leading-none">ticketr<span class="text-lime">.</span></p>
+            <p class="text-[8.5px] font-bold uppercase tracking-[0.18em] text-paper/40 mt-1">Platform admin</p>
+          </div>
         </NuxtLink>
-        <button @click="isSidebarOpen = false" class="lg:hidden text-gray-500 hover:text-gray-700">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        <button class="lg:hidden p-1.5 text-paper/60" aria-label="Close menu" @click="mobileOpen = false">
+          <X class="w-5 h-5" />
         </button>
       </div>
 
-      <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1.5">
-        <NuxtLink to="/dashboard" class="nav-link" active-class="nav-link-active" exact-active-class="nav-link-active" @click="isSidebarOpen = false">
-          Overview
-        </NuxtLink>
-        <NuxtLink to="/dashboard/events" class="nav-link" active-class="nav-link-active" @click="isSidebarOpen = false">
-          Global Events
-        </NuxtLink>
-        <NuxtLink to="/dashboard/transactions" class="nav-link" active-class="nav-link-active" @click="isSidebarOpen = false">
-          Global Transactions
-        </NuxtLink>
-        <NuxtLink to="/dashboard/email-logs" class="nav-link" active-class="nav-link-active" @click="isSidebarOpen = false">
-          Email Logs
+      <nav class="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto no-scrollbar">
+        <p class="console-label">Platform</p>
+        <NuxtLink v-for="item in nav" :key="item.to" :to="item.to" class="console-link" :class="{ 'console-link-active': isActive(item) }" @click="mobileOpen = false">
+          <component :is="item.icon" class="w-[18px] h-[18px] shrink-0" />
+          {{ item.label }}
         </NuxtLink>
       </nav>
 
-      <div class="p-4 border-t border-gray-200 bg-gray-50/50">
-        <button @click="showLogoutModal = true" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-600 border border-red-200 hover:bg-red-50 transition-colors bg-white">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-          Logout
+      <div class="p-2 border-t border-white/10 space-y-0.5">
+        <a :href="publicUrl" target="_blank" class="console-link">
+          <ExternalLink class="w-[18px] h-[18px]" /> Public storefront
+        </a>
+        <button type="button" class="console-link w-full" @click="logoutOpen = true">
+          <LogOut class="w-[18px] h-[18px]" /> Sign out
         </button>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden h-screen">
-      <!-- Standard Top Header -->
-      <header class="h-16 bg-white border-b border-gray-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
-        <div class="flex items-center gap-4">
-          <button @click="isSidebarOpen = true" class="lg:hidden text-gray-600 hover:text-gray-900 p-1 -ml-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          </button>
-          
-          <div class="hidden lg:flex items-center text-sm text-gray-500 font-medium">
-            <span class="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-md text-xs font-bold mr-2 uppercase tracking-wide">Super Admin</span>
-            {{ routeName }}
+    <div class="flex-1 min-w-0 flex flex-col">
+      <header class="sticky top-0 z-30 h-[68px] bg-paper/90 backdrop-blur border-b border-line">
+        <div class="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <button class="lg:hidden p-2 -ml-1 rounded-lg border border-line bg-white" aria-label="Open menu" @click="mobileOpen = true">
+              <Menu class="w-5 h-5" />
+            </button>
+            <div class="min-w-0">
+              <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-muted">Platform admin</p>
+              <h1 class="font-display text-[17px] font-semibold text-ink truncate">{{ title }}</h1>
+            </div>
           </div>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="chip-ink hidden sm:inline-flex !text-[9px]">SUPER ADMIN</span>
             <div class="hidden sm:block text-right">
-              <div class="text-sm font-bold text-gray-900">{{ user?.name || 'Administrator' }}</div>
-              <div class="text-[11px] text-gray-500 font-medium">{{ user?.email }}</div>
+              <p class="text-[12.5px] font-semibold text-ink leading-tight">{{ user?.name || 'Administrator' }}</p>
+              <p class="text-[10px] text-muted">{{ user?.email }}</p>
             </div>
-            <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center font-bold text-emerald-700">
-              {{ (user?.name || 'S').charAt(0).toUpperCase() }}
-            </div>
+            <span class="w-8 h-8 rounded-full bg-ink text-lime flex items-center justify-center text-[11px] font-bold">
+              {{ initials(user?.name || 'A') }}
+            </span>
           </div>
         </div>
       </header>
 
-      <main class="flex-1 overflow-y-auto w-full relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <main class="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-16">
+        <div class="mx-auto w-full max-w-[1280px]">
           <slot />
         </div>
       </main>
     </div>
 
-    <!-- Logout Modal -->
-    <div v-if="showLogoutModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
-      <div class="bg-white border border-gray-200 w-full max-w-sm p-6 rounded-2xl relative shadow-xl">
-        <h3 class="text-lg font-bold text-gray-900 mb-2">Confirm Logout</h3>
-        <p class="text-sm text-gray-500 mb-6">Are you sure you want to sign out of the Super Admin account?</p>
-        <div class="flex justify-end gap-3">
-          <button @click="showLogoutModal = false" class="px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition">Cancel</button>
-          <button @click="confirmLogout" class="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition">Yes, Logout</button>
-        </div>
-      </div>
-    </div>
+    <UiModal :open="logoutOpen" title="Sign out of platform admin?" eyebrow="Confirm" size="sm" @close="logoutOpen = false">
+      <p class="text-sm text-muted">Your platform-wide session ends on this device.</p>
+      <template #footer>
+        <button class="btn-danger" type="button" @click="logout">Sign out</button>
+        <button class="btn-secondary" type="button" @click="logoutOpen = false">Cancel</button>
+      </template>
+    </UiModal>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+<script setup lang="ts">
+import { Banknote, ExternalLink, LayoutDashboard, LogOut, Mail, Menu, ShieldCheck, Ticket, Users, X } from 'lucide-vue-next';
 
-const isSidebarOpen = ref(false);
-const showLogoutModal = ref(false);
-const user = ref(null);
-const router = useRouter();
 const route = useRoute();
+const config = useRuntimeConfig();
+const mobileOpen = ref(false);
+const logoutOpen = ref(false);
+const user = ref<any>(null);
 
-const routeName = computed(() => {
-  const path = route.path;
-  if (path === '/dashboard') return 'Overview';
-  if (path.includes('/events')) return 'Global Events';
-  if (path.includes('/transactions')) return 'Global Transactions';
-  return '';
+const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+const nav = [
+  { to: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+  { to: '/dashboard/events', label: 'Events', icon: Ticket },
+  { to: '/dashboard/transactions', label: 'Transactions', icon: Users },
+  { to: '/dashboard/payouts', label: 'Payouts', icon: Banknote },
+  { to: '/dashboard/email-logs', label: 'Deliverability', icon: Mail },
+];
+
+const title = computed(() => {
+  if (route.path === '/dashboard') return 'Platform overview';
+  if (route.path.includes('/events')) return 'All events';
+  if (route.path.includes('/transactions')) return 'All transactions';
+  if (route.path.includes('/payouts')) return 'Payout settlements';
+  if (route.path.includes('/email-logs')) return 'Email delivery';
+  return 'Platform';
 });
+
+function isActive(item: { to: string }) {
+  if (item.to === '/dashboard') return route.path === '/dashboard';
+  return route.path.startsWith(item.to);
+}
+
+function logout() {
+  localStorage.removeItem('ticketr_super_token');
+  localStorage.removeItem('ticketr_super_user');
+  navigateTo('/login');
+}
 
 onMounted(() => {
-  if (import.meta.client) {
-    user.value = JSON.parse(localStorage.getItem('ticketr_super_user') || '{}');
+  try {
+    user.value = JSON.parse(localStorage.getItem('ticketr_super_user') || 'null');
+  } catch {
+    user.value = null;
   }
 });
-
-// Close sidebar on route change on mobile
-watch(() => route.path, () => {
-  isSidebarOpen.value = false;
-});
-
-function confirmLogout() {
-  if (import.meta.client) {
-    localStorage.removeItem('ticketr_super_token');
-    localStorage.removeItem('ticketr_super_user');
-  }
-  router.push('/login');
-}
 </script>
-
-<style scoped>
-.nav-link {
-  @apply block px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all;
-}
-.nav-link-active {
-  @apply bg-emerald-50 text-emerald-700;
-}
-</style>

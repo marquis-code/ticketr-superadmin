@@ -1,144 +1,147 @@
 <template>
-  <div>
-    <main class="w-full space-y-8">
-      <div>
-        <h1 class="text-2xl font-extrabold text-gray-900">Email Logs</h1>
-        <p class="text-xs text-gray-600 mt-1">Audit log of all platform emails sent via Resend.</p>
+  <div class="space-y-4">
+    <section class="surface p-4 flex flex-col sm:flex-row gap-2">
+      <div class="relative flex-1">
+        <Search class="w-4 h-4 text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <input v-model="search" type="search" placeholder="Search recipient or subject" class="input !pl-10 !py-2.5" />
       </div>
+      <select v-model="status" class="input sm:w-36 !py-2.5">
+        <option value="ALL">All statuses</option>
+        <option value="SENT">Sent</option>
+        <option value="FAILED">Failed</option>
+        <option value="PENDING">Pending</option>
+      </select>
+      <button class="btn-secondary btn-sm shrink-0" type="button" @click="load">
+        <RefreshCcw class="w-3.5 h-3.5" :class="{ 'animate-spin': loading }" /> Refresh
+      </button>
+    </section>
 
-      <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-        <div v-if="loading" class="text-center py-12 text-gray-500 text-sm">
-          Loading email logs...
-        </div>
+    <div v-if="error" class="surface p-4 border-coral/30 bg-coral/5 flex items-start gap-3">
+      <AlertTriangle class="w-5 h-5 text-coral shrink-0 mt-0.5" />
+      <p class="text-sm text-ink flex-1">{{ error }}</p>
+      <button class="btn-secondary btn-sm" type="button" @click="load">Retry</button>
+    </div>
 
-        <div v-else-if="logs.length === 0" class="text-center py-12 text-gray-500 text-sm">
-          No emails logged yet.
-        </div>
-
-        <div v-else class="overflow-x-auto">
-          <table class="w-full text-left border-collapse whitespace-nowrap">
-            <thead class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
-              <tr>
-                <th class="px-6 py-4">Recipient</th>
-                <th class="px-6 py-4">Subject</th>
-                <th class="px-6 py-4">Status</th>
-                <th class="px-6 py-4">Retries</th>
-                <th class="px-6 py-4">Error Reason</th>
-                <th class="px-6 py-4">Timestamp</th>
-                <th class="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 bg-white">
-              <tr v-for="log in logs" :key="log._id" class="hover:bg-gray-50 transition-colors duration-150">
-                <td class="px-6 py-4 font-semibold text-gray-900 text-sm">{{ log.recipientEmail }}</td>
-                <td class="px-6 py-4 text-xs text-gray-600 truncate max-w-[250px]" :title="log.subject">{{ log.subject }}</td>
-                <td class="px-6 py-4">
-                  <span
-                    :class="getStatusClass(log.status)"
-                    class="px-2.5 py-1 rounded-full text-[11px] font-semibold border"
-                  >
-                    {{ log.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 text-xs text-gray-600">{{ log.retryCount }}</td>
-                <td class="px-6 py-4 text-xs text-red-600 truncate max-w-[200px]" :title="log.errorReason">{{ log.errorReason || '-' }}</td>
-                <td class="px-6 py-4 text-xs text-gray-500">{{ new Date(log.createdAt).toLocaleString() }}</td>
-                <td class="px-6 py-4 text-right">
-                  <button 
-                    v-if="log.status === 'FAILED'"
-                    @click="retryEmail(log._id)"
-                    :disabled="retrying === log._id"
-                    class="inline-flex items-center justify-center rounded-lg text-xs font-semibold px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 disabled:opacity-50 transition"
-                  >
-                    {{ retrying === log._id ? 'Retrying...' : 'Resend' }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <!-- Basic Pagination -->
-          <div class="px-6 py-4 border-t border-gray-200 flex justify-between items-center" v-if="meta">
-            <span class="text-xs text-gray-500">Page {{ meta.page }} of {{ meta.totalPages }} ({{ meta.total }} total)</span>
-            <div class="space-x-2">
-              <button @click="loadLogs(meta.page - 1)" :disabled="meta.page <= 1" class="px-3 py-1 text-xs border rounded disabled:opacity-50 hover:bg-gray-50">Previous</button>
-              <button @click="loadLogs(meta.page + 1)" :disabled="meta.page >= meta.totalPages" class="px-3 py-1 text-xs border rounded disabled:opacity-50 hover:bg-gray-50">Next</button>
-            </div>
-          </div>
-        </div>
+    <section class="table-wrap">
+      <div v-if="loading" class="p-5 space-y-2.5">
+        <div v-for="n in 7" :key="n" class="skeleton h-12" />
       </div>
-    </main>
+      <UiEmpty v-else-if="!filtered.length" title="No delivery records" message="Ticket and campaign emails appear here as they are sent." class="!py-14">
+        <template #icon><Mail class="w-6 h-6" /></template>
+      </UiEmpty>
+      <table v-else class="table min-w-[820px]">
+        <thead>
+          <tr>
+            <th>Recipient</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Attempts</th>
+            <th>Created</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="log in filtered" :key="log._id">
+            <td class="text-[12px] text-ink max-w-[190px] truncate">{{ log.recipientEmail }}</td>
+            <td class="max-w-[300px]">
+              <p class="text-[12px] text-ink truncate">{{ log.subject }}</p>
+              <p v-if="log.errorReason" class="text-[10.5px] text-coral truncate">{{ log.errorReason }}</p>
+            </td>
+            <td><UiBadge :value="log.status" dot /></td>
+            <td class="text-[11.5px] text-muted">{{ log.retryCount || 0 }}</td>
+            <td class="text-[11px] text-muted whitespace-nowrap">{{ formatDateTime(log.createdAt) }}</td>
+            <td>
+              <div class="flex justify-end">
+                <button
+                  v-if="log.status === 'FAILED'"
+                  class="btn-secondary btn-sm !py-1.5 !px-2.5 text-[11px]"
+                  type="button"
+                  :disabled="retrying === log._id"
+                  @click="retry(log)"
+                >
+                  {{ retrying === log._id ? 'Retrying…' : 'Retry' }}
+                </button>
+                <span v-else class="text-[10px] text-muted px-2">—</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="flex items-center justify-between">
+      <p class="text-[12px] text-muted">{{ meta.total || 0 }} records · page {{ page }} of {{ meta.totalPages || 1 }}</p>
+      <div class="flex gap-2">
+        <button class="btn-secondary btn-sm" type="button" :disabled="page <= 1" @click="changePage(page - 1)">Previous</button>
+        <button class="btn-secondary btn-sm" type="button" :disabled="page >= (meta.totalPages || 1)" @click="changePage(page + 1)">Next</button>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { AlertTriangle, Mail, RefreshCcw, Search } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
+
 definePageMeta({ layout: 'superadmin' });
 
-import { ref, onMounted } from 'vue';
-
-const config = useRuntimeConfig();
-
-const logs = ref([]);
-const meta = ref(null);
+const logs = ref<any[]>([]);
+const meta = ref<any>({});
 const loading = ref(true);
-const retrying = ref(null);
+const error = ref('');
+const search = ref('');
+const status = ref('ALL');
+const page = ref(1);
+const limit = 30;
+const retrying = ref<string | null>(null);
 
-function getStatusClass(status) {
-  switch (status) {
-    case 'SENT': return 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20';
-    case 'FAILED': return 'bg-red-500/10 text-red-600 border-red-500/20';
-    case 'PENDING': return 'bg-amber-500/10 text-amber-600 border-amber-500/20';
-    default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
-  }
-}
+const filtered = computed(() => {
+  const query = search.value.trim().toLowerCase();
+  return logs.value.filter((log) => {
+    const matchesStatus = status.value === 'ALL' || log.status === status.value;
+    const matchesSearch =
+      !query ||
+      log.recipientEmail?.toLowerCase().includes(query) ||
+      log.subject?.toLowerCase().includes(query);
+    return matchesStatus && matchesSearch;
+  });
+});
 
-async function loadLogs(page = 1) {
-  const token = localStorage.getItem('ticketr_super_token');
-  if (!token) return;
-
+async function load() {
   loading.value = true;
+  error.value = '';
   try {
-    const res = await fetch(`${config.public.apiBase}/email-logs?page=${page}&limit=20`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (res.ok) {
-      const result = await res.json();
-      logs.value = result.data;
-      meta.value = result.meta;
-    }
+    const data = await apiRequest<any>(`/email-logs?page=${page.value}&limit=${limit}`);
+    logs.value = data?.data || [];
+    meta.value = data?.meta || {};
   } catch (err) {
-    console.error(err);
+    error.value = errorMessage(err);
+    logs.value = [];
   } finally {
     loading.value = false;
   }
 }
 
-async function retryEmail(id) {
-  const token = localStorage.getItem('ticketr_super_token');
-  if (!token) return;
+function changePage(next: number) {
+  if (next < 1 || next > (meta.value.totalPages || 1)) return;
+  page.value = next;
+  load();
+}
 
-  retrying.value = id;
+async function retry(log: any) {
+  retrying.value = log._id;
   try {
-    const res = await fetch(`${config.public.apiBase}/email-logs/${id}/retry`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert('Email retry attempted successfully (Check status).');
-      loadLogs(meta.value?.page || 1);
-    } else {
-      alert('Failed to retry email.');
-    }
+    const result = await apiRequest<any>(`/email-logs/${log._id}/retry`, { method: 'POST' });
+    if (result?.success) toast.success('Email re-sent');
+    else toast.error(result?.message || 'That email could not be retried');
+    await load();
   } catch (err) {
-    console.error(err);
-    alert('Network error while retrying email.');
+    toast.error(errorMessage(err));
   } finally {
     retrying.value = null;
   }
 }
 
-onMounted(() => {
-  loadLogs();
-});
+onMounted(load);
+useSeoMeta({ title: 'Email deliverability', robots: 'noindex, nofollow' });
 </script>
