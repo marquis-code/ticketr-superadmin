@@ -90,7 +90,7 @@ const mobileOpen = ref(false);
 const logoutOpen = ref(false);
 const user = ref<any>(null);
 
-const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+const publicUrl = computed(() => appOrigin('public'));
 const nav = [
   { to: '/dashboard', label: 'Overview', icon: LayoutDashboard },
   { to: '/dashboard/events', label: 'Events', icon: Ticket },

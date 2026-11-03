@@ -235,7 +235,7 @@ import { toast } from 'vue-sonner';
 definePageMeta({ layout: 'superadmin' });
 
 const config = useRuntimeConfig();
-const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+const publicUrl = computed(() => appOrigin('public'));
 
 const loading = ref(true);
 const error = ref('');

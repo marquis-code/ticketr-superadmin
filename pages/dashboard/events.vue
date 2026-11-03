@@ -86,7 +86,7 @@ import { AlertTriangle, ExternalLink, Search, Ticket } from 'lucide-vue-next';
 definePageMeta({ layout: 'superadmin' });
 
 const config = useRuntimeConfig();
-const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+const publicUrl = computed(() => appOrigin('public'));
 
 const events = ref<any[]>([]);
 const loading = ref(true);

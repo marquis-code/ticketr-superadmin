@@ -74,7 +74,7 @@ definePageMeta({ layout: false });
 
 const route = useRoute();
 const config = useRuntimeConfig();
-const publicUrl = computed(() => String(config.public.publicUrl || 'https://ticketr.org'));
+const publicUrl = computed(() => appOrigin('public'));
 
 const email = ref('');
 const password = ref('');
